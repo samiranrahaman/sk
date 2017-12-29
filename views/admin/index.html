@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Add Details</title>
+  
+
+	<link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!--<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>-->
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+  <!--<link href="css/styles.css" rel="stylesheet">-->
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Skydocks</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/admin">Home</a></li>
+     <!-- <li><a href="/uploadfile">Upload</a></li>-->
+      <li><a href="/list">Listing</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+	  
+        <div class="panel panel-default">
+          <div class="panel-body">
+		  <h3>Add Details</h3></br>
+			<form method="post" action="/admin">
+			  <div class="form-group">
+				<label for="email">Vessel:</label>
+				<input type="text" name="vessel">
+				
+			  </div>
+			  <div class="form-group">
+				<label for="email">Product:</label>
+				<select name="prod">
+				  <option value="HSFO">HSFO</option>
+				  <option value="VGO">VGO</option>
+				  <option value="GOLD">GOLD</option>
+				  <option value="LCO">LCO</option>
+				  <option value="FRN">FRN</option>
+				  <option value="COMP">COMP</option>
+				  <option value="GAS">GAS</option>
+				  <option value="ULSD">ULSD</option>
+				   <option value="LUBE">LUBE</option>
+				  
+				</select>
+			  </div>
+			  <div class="form-group">
+				<label for="email">vol:</label>
+				<input type="text" name="vol">
+			  </div>
+			   <div class="form-group">
+				<label for="email">rate:</label>
+				<input type="text" name="rate">
+			  </div>
+			  
+			      <div class="form-group">
+				<label for="email">Berth:</label>
+				<select name="berth">
+				  <option value="2">2</option>
+				  <option value="6A">6A</option>
+				  <option value="6B">6B</option>
+				  <option value="7">7</option>
+				  <option value="NS">NS</option>
+				  <option value="PNT">PNT</option>
+				  
+				</select>
+			  </div>
+			    <div class="form-group">
+                <div class='input-group date' id='datetimepicker1' style="width: 19%;">
+                    <input type='text' name="starttime"  class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+					</div>
+				</div>
+				 <div class="form-group">
+					<div class='input-group date' id='datetimepicker2' style="width: 19%;">
+						<input type='text' name="endtime" class="form-control" />
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+				<div class="form-group">
+				<label for="email">Priority:</label>
+				<select name="priority">
+				  <option style="background-color:#000000;color:#fff" value="Black">Black</option>
+				  <option style="background-color:#0000ff;color:#fff"  value="Blue">Blue</option>
+				   <option style="background-color:#ffff00;color:#fff"  value="Yellow">Yellow</option>
+				    <option style="background-color:#008000;color:#fff"  value="Green">Green</option>
+					 <option style="background-color:#32CD32;color:#fff"  value="limegreen">limegreen</option>
+					  <option style="background-color:#FFA500;color:#fff"  value="Orange">Orange</option>
+				     <option style="background-color:#FF0000;color:#fff"  value="Red">Red</option>
+				</select>
+			  </div>
+				 <div class="form-group">
+				  <input type="submit">
+			   </div>
+				
+			</form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+ 
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+	<script src="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
+	
+	
+   <link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+
+  <script type="text/javascript">
+            $(function () {
+               $('#datetimepicker1').datetimepicker({
+                   // locale: 'us'
+                });
+				 $('#datetimepicker2').datetimepicker({
+                  //  locale: 'us'
+                });
+            });
+        </script>
+</body>
+</html>

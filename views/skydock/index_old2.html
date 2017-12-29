@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+
+	<!--<meta http-equiv="x-ua-compatible" content="IE=9">-->
+	<link href="http://cdn-na.infragistics.com/igniteui/2017.2/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
+	<link href="http://cdn-na.infragistics.com/igniteui/2017.2/latest/css/structure/infragistics.css" rel="stylesheet" />
+
+	<script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+	<!-- Ignite UI Required Combined JavaScript Files -->
+	<script src="http://cdn-na.infragistics.com/igniteui/2017.2/latest/js/infragistics.core.js"></script>
+	<script src="http://cdn-na.infragistics.com/igniteui/2017.2/latest/js/infragistics.lob.js"></script>
+	<script src="http://cdn-na.infragistics.com/igniteui/2017.2/latest/js/infragistics.scheduler-bundled.js"></script>
+	<script src="https://www.igniteui.com/data-files/scheduler-data.js"></script>
+</head>
+<body>
+    <div id="scheduler"></div>
+    <script>
+        $(function () {
+            $("#scheduler").igScheduler({
+                height: "650px",
+                width: "100%",
+                selectedDate: today,
+                views: ["monthView", "agendaView"],
+                dataSource: appointments,
+                resources: resources
+            });
+        });
+    </script>
+
+</body>
+</html>

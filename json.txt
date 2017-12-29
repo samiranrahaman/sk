@@ -1,0 +1,5 @@
+{"vessel":"AmPride","OPEN":"GAS","vol":"289","rate":"6","berth":"2","start":"1322611200000","end":"1323302400000","span":"120"}
+
+{"vessel":"TBD","prod":"ULSD","vol":"289","rate":"6","berth":"2","start":"1322611200000","end":"1323302400000","span":"120"},
+{"vessel":"OSNY","prod":"GAS","vol":"60","rate":"6","berth":"3","start":"1323802400000","end":"1325685200000","span":"120"},
+{"vessel":"dockout","prod":"ULSD","vol":"289","rate":"6","berth":"4","start":"1326785200000","end":"1325785200000","span":"120"},
