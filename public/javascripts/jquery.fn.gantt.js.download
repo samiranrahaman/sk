@@ -277,22 +277,21 @@
             },
             leftPanel: function (element) {
                 /* Left panel */
-				/*custom change*/
                 var ganttLeftPanel = $('<div class="leftPanel"/>')
 					.append($('<div class="row spacer"/>')
-					.css("height", (tools.getCellSize()/4) * element.headerRows + "px")
+					.css("height", tools.getCellSize() * element.headerRows + "px")
 					.css("width", "100%"));
 
                 var entries = [];
                 $.each(element.data, function (i, entry) {
                     if (i >= element.pageNum * settings.itemsPerPage && i < (element.pageNum * settings.itemsPerPage + settings.itemsPerPage)) {
                         entries.push('<div class="row name row' + i + '" id="rowheader' + i + '" offset="' + i * tools.getCellSize() + '">');
-                        entries.push('<span class="fn-label ' + entry.cssClass + '">' + entry.berth + '</span>');
+                        entries.push('<span class="fn-label ' + entry.cssClass + '">' + entry.name + '</span>');
                         entries.push('</div>');
 
-                        /*entries.push('<div class="row desc row' + i + ' " id="RowdId_' + i + '" data-id="' + entry.id + '">');
+                        entries.push('<div class="row desc row' + i + ' " id="RowdId_' + i + '" data-id="' + entry.id + '">');
                         entries.push('<span class="fn-label ' + entry.cssClass + '">' + entry.desc + '</span>');
-                        entries.push('</div>');*/
+                        entries.push('</div>');
 
                         //                        ganttLeftPanel
                         //							.append($('<div class="row name row' + i + ' " />').append($('<span class="fn-label ' + entry.cssClass + '"/>').html(entry.name)))
@@ -358,7 +357,6 @@
                             row = $(row);
                         }
                         var rowId = row.data().id;
-						//alert(rowId)
                         e.data.evt(dt, rowId);
                     });
                 }
@@ -409,7 +407,7 @@
                             var rfy = rday.getFullYear();
                             if (rfy != year) {
                                 yearArr.push(
-									('<div class="row header year 7" style="width: '
+									('<div class="row header year" style="width: '
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -477,7 +475,7 @@
                         */
 
                         yearArr.push(
-							'<div class="row header year 6" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -534,7 +532,7 @@
                             */
                             if (rday.getFullYear() != year) {
                                 yearArr.push(
-									('<div class="row header year 5" style="width: '
+									('<div class="row header year" style="width: '
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -570,7 +568,7 @@
                         * Last year
                         */
                         yearArr.push(
-							'<div class="row header year 4" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -606,7 +604,7 @@
                             */
                             if (rday.getFullYear() != year) {
                                 yearArr.push(
-									('<div class="row header year 3" style="width: '
+									('<div class="row header year" style="width: '
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -625,7 +623,7 @@
                         * Last year
                         */
                         yearArr.push(
-							'<div class="row header year 2" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -664,9 +662,8 @@
                             * Fill years
                             */
                             if (rday.getFullYear() != year) {
-								
                                 yearArr.push(
-									('<div class="row header year 1" style="width:'
+									('<div class="row header year" style="width:'
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -707,9 +704,8 @@
                         /*
                         * Last year
                         */
-						//alert(tools.getCellSize())
                         yearArr.push(
-							'<div class="row header year 8" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -926,7 +922,7 @@
             createProgressBar: function (days, cls, desc, label, dataObj) {
                 var cellWidth = tools.getCellSize();
                 var barMarg = tools.getProgressBarMargin() || 0;
-                var bar = $('<div class="bar" label="'+label+'" h_diff="'+dataObj.h_diff+'" timestamp="'+dataObj.id+'" berth="'+dataObj.berth+'"  customClass="'+cls+'"><div class="fn-label">' + label + '</div></div>')
+                var bar = $('<div class="bar"><div class="fn-label">' + label + '</div></div>')
 						.addClass(cls)
 						.css({
 						    width: ((cellWidth * days) - barMarg)
@@ -968,7 +964,7 @@
                                 var corrY;
                                 var datapanel = $(".fn-gantt .rightPanel .dataPanel");
                                 var leftpanel = $(".fn-gantt .rightPanel .leftPanel");
-                               
+                                ;
                                 switch (settings.scale) {
                                     case "weeks":
                                         corrY = tools.getCellSize() * 2;
@@ -1122,7 +1118,7 @@
 
                                     // find row
                                     var topEl = $(element).find("#rowheader" + i);
-                                     //alert(topEl);
+
                                     var top = tools.getCellSize() * 3 + 2 + parseInt(topEl.attr("offset"));
                                     _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) });
 
@@ -1187,12 +1183,10 @@
 
                                     // find row
                                     var topEl = $(element).find("#rowheader" + i);
-                                    //custom
-                                    /* var top = tools.getCellSize() * 4 + 2 + parseInt(topEl.attr("offset"));
-                                    _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) }); */
-									var top = tools.getCellSize() + 2 + parseInt(topEl.attr("offset"));
+
+                                    var top = tools.getCellSize() * 4 + 2 + parseInt(topEl.attr("offset"));
                                     _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) });
-									//alert(top);
+
                                     datapanel.append(_bar);
 
                                     break;
@@ -1691,7 +1685,7 @@
                     tools._getCellSize = $("#measureCellWidth .row").height();
                     $("#measureCellWidth").empty().remove();
                 }
-                return tools._getCellSize*4;
+                return tools._getCellSize;
             },
             getRightPanelSize: function () {
                 $("body").append(

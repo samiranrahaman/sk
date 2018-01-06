@@ -1,153 +1,4 @@
-/**
-*
-* JQuery fn.gantt gantt chart plugin v1.2.0
-* Copyright 2011 by Marek Bielańczuk
-* http://mbielanczuk.com/
-* Released under the MIT and GPL Licenses.
-*
-* Last Modified: Fri Feb 03 2012 8:57:00 +0800
-*/
-
-(function ($) {
-
-
-    "use strict";
-
-    $.fn.gantt = function (options) {
-
-        var cookieKey = "jquery.fn.gantt";
-        var scales = ["hours", "days", "weeks", "months"];
-
-        var settings = {
-            source: null,
-            itemsPerPage: 7,
-            months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-             dow: ["S", "M", "T", "W", "T", "F", "S"],
-            startPos: new Date(),
-            navigate: "buttons",
-            scale: "days",
-            useCookie: false,
-            maxScale: "months",
-            minScale: "hours",
-            waitText: "Please wait...",
-            onEmptyCell: [],
-            onItem: [],
-            onComplete: function () { return; },
-			//onRender: function(data) { return; },
-            scrollToToday: true
-        };
-
-        $.extend($.expr[":"], {
-            findday: function (a, i, m) {
-                var cd = new Date(parseInt(m[3]));
-                var id = $(a).attr("id");
-                id = id ? id : "";
-                var si = id.indexOf("-") + 1;
-                var ed = new Date(parseInt(id.substring(si, id.length)));
-                cd = new Date(cd.getFullYear(), cd.getMonth(), cd.getDate());
-                ed = new Date(ed.getFullYear(), ed.getMonth(), ed.getDate());
-                return cd.getTime() === ed.getTime();
-            }
-        });
-
-        $.extend($.expr[":"], {
-            findweek: function (a, i, m) {
-                var cd = new Date(parseInt(m[3]));
-                var id = $(a).attr("id");
-                id = id ? id : "";
-                var si = id.indexOf("-") + 1;
-                cd = cd.getFullYear() + "-" + cd.getDayForWeek().getWeekOfYear();
-                var ed = id.substring(si, id.length);
-                return cd === ed;
-            }
-        });
-
-        $.extend($.expr[":"], {
-            findmonth: function (a, i, m) {
-                var cd = new Date(parseInt(m[3]));
-                cd = cd.getFullYear() + "-" + cd.getMonth();
-                var id = $(a).attr("id");
-                id = id ? id : "";
-                var si = id.indexOf("-") + 1;
-                var ed = id.substring(si, id.length);
-                return cd === ed;
-            }
-        });
-
-        Date.prototype.getWeekId = function () {
-            var y = this.getFullYear();
-            var w = this.getDayForWeek().getWeekOfYear();
-            var m = this.getMonth();
-            if (m == 11 && w == 1) {
-                y++;
-            }
-            return 'dh-' + y + "-" + w;
-        };
-
-
-
-        Date.prototype.genRepDate = function () {
-
-            switch (settings.scale) {
-                case "hours":
-                    return this.getTime();
-                case "weeks":
-                    return this.getDayForWeek().getTime();
-                case "months":
-                    return new Date(this.getFullYear(), this.getMonth(), 1).getTime();
-                    break;
-                default:
-                    return this.getTime();
-                    break;
-            }
-        };
-        Date.prototype.getDayOfYear = function () {
-            var fd = new Date(this.getFullYear(), 0, 0);
-            var sd = new Date(this.getFullYear(), this.getMonth(), this.getDate());
-            return Math.ceil((sd - fd) / 86400000);
-        };
-        Date.prototype.getWeekOfYear = function () {
-            var ys = new Date(this.getFullYear(), 0, 1);
-            var sd = new Date(this.getFullYear(), this.getMonth(), this.getDate());
-            if (ys.getDay() > 3)
-                ys = new Date(sd.getFullYear(), 0, 7 - ys.getDay());
-            var daysCount = sd.getDayOfYear() - ys.getDayOfYear();
-            return Math.ceil(daysCount / 7);
-
-        };
-        Date.prototype.getDaysInMonth = function () {
-            return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
-        };
-        Date.prototype.hasWeek = function () {
-            var df = new Date(this.valueOf());
-            df.setDate(df.getDate() - df.getDay());
-            var dt = new Date(this.valueOf());
-            dt.setDate(dt.getDate() + (6 - dt.getDay()));
-
-            if (df.getMonth() === dt.getMonth())
-                return true;
-            else {
-                return (df.getMonth() === this.getMonth() && dt.getDate() < 4)
-					|| (df.getMonth() != this.getMonth() && dt.getDate() >= 4);
-            }
-        };
-        Date.prototype.getDayForWeek = function () {
-            var df = new Date(this.valueOf());
-            df.setDate(df.getDate() - df.getDay());
-            var dt = new Date(this.valueOf());
-            dt.setDate(dt.getDate() + (6 - dt.getDay()));
-            if ((df.getMonth() === dt.getMonth())
-			 || (df.getMonth() != dt.getMonth() && dt.getDate() >= 4)) {
-                return new Date(dt.setDate(dt.getDate() - 3));
-            } else {
-                return new Date(df.setDate(df.getDate() + 3));
-            }
-        };
-
-        /**
-        * Core functions for creating grid.
-        */
-        var core = {
+var core = {
 
 
             elementFromPoint: function (x, y) {
@@ -277,17 +128,16 @@
             },
             leftPanel: function (element) {
                 /* Left panel */
-				/*custom change*/
                 var ganttLeftPanel = $('<div class="leftPanel"/>')
 					.append($('<div class="row spacer"/>')
-					.css("height", (tools.getCellSize()/4) * element.headerRows + "px")
+					.css("height", tools.getCellSize() * element.headerRows + "px")
 					.css("width", "100%"));
 
                 var entries = [];
                 $.each(element.data, function (i, entry) {
                     if (i >= element.pageNum * settings.itemsPerPage && i < (element.pageNum * settings.itemsPerPage + settings.itemsPerPage)) {
                         entries.push('<div class="row name row' + i + '" id="rowheader' + i + '" offset="' + i * tools.getCellSize() + '">');
-                        entries.push('<span class="fn-label ' + entry.cssClass + '">' + entry.berth + '</span>');
+                        entries.push('<span class="fn-label ' + entry.cssClass + '">' + entry.name + '</span>');
                         entries.push('</div>');
 
                         /*entries.push('<div class="row desc row' + i + ' " id="RowdId_' + i + '" data-id="' + entry.id + '">');
@@ -358,7 +208,6 @@
                             row = $(row);
                         }
                         var rowId = row.data().id;
-						//alert(rowId)
                         e.data.evt(dt, rowId);
                     });
                 }
@@ -409,7 +258,7 @@
                             var rfy = rday.getFullYear();
                             if (rfy != year) {
                                 yearArr.push(
-									('<div class="row header year 7" style="width: '
+									('<div class="row header year" style="width: '
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -477,7 +326,7 @@
                         */
 
                         yearArr.push(
-							'<div class="row header year 6" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -534,7 +383,7 @@
                             */
                             if (rday.getFullYear() != year) {
                                 yearArr.push(
-									('<div class="row header year 5" style="width: '
+									('<div class="row header year" style="width: '
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -570,7 +419,7 @@
                         * Last year
                         */
                         yearArr.push(
-							'<div class="row header year 4" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -606,7 +455,7 @@
                             */
                             if (rday.getFullYear() != year) {
                                 yearArr.push(
-									('<div class="row header year 3" style="width: '
+									('<div class="row header year" style="width: '
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -625,7 +474,7 @@
                         * Last year
                         */
                         yearArr.push(
-							'<div class="row header year 2" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -664,9 +513,8 @@
                             * Fill years
                             */
                             if (rday.getFullYear() != year) {
-								
                                 yearArr.push(
-									('<div class="row header year 1" style="width:'
+									('<div class="row header year" style="width:'
 										+ tools.getCellSize() * daysInYear
 										+ 'px;"><div class="fn-label">'
 										+ year
@@ -707,9 +555,8 @@
                         /*
                         * Last year
                         */
-						//alert(tools.getCellSize())
                         yearArr.push(
-							'<div class="row header year 8" style="width: '
+							'<div class="row header year" style="width: '
 							+ tools.getCellSize() * daysInYear + 'px;"><div class="fn-label">'
 							+ year
 							+ '</div></div>');
@@ -926,7 +773,7 @@
             createProgressBar: function (days, cls, desc, label, dataObj) {
                 var cellWidth = tools.getCellSize();
                 var barMarg = tools.getProgressBarMargin() || 0;
-                var bar = $('<div class="bar" label="'+label+'" h_diff="'+dataObj.h_diff+'" timestamp="'+dataObj.id+'" berth="'+dataObj.berth+'"  customClass="'+cls+'"><div class="fn-label">' + label + '</div></div>')
+                var bar = $('<div class="bar"><div class="fn-label">' + label + '</div></div>')
 						.addClass(cls)
 						.css({
 						    width: ((cellWidth * days) - barMarg)
@@ -968,7 +815,8 @@
                                 var corrY;
                                 var datapanel = $(".fn-gantt .rightPanel .dataPanel");
                                 var leftpanel = $(".fn-gantt .rightPanel .leftPanel");
-                               
+                                ;
+								//alert(tools.getCellSize());
                                 switch (settings.scale) {
                                     case "weeks":
                                         corrY = tools.getCellSize() * 2;
@@ -1122,7 +970,7 @@
 
                                     // find row
                                     var topEl = $(element).find("#rowheader" + i);
-                                     //alert(topEl);
+
                                     var top = tools.getCellSize() * 3 + 2 + parseInt(topEl.attr("offset"));
                                     _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) });
 
@@ -1187,12 +1035,10 @@
 
                                     // find row
                                     var topEl = $(element).find("#rowheader" + i);
-                                    //custom
-                                    /* var top = tools.getCellSize() * 4 + 2 + parseInt(topEl.attr("offset"));
-                                    _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) }); */
-									var top = tools.getCellSize() + 2 + parseInt(topEl.attr("offset"));
+
+                                    var top = tools.getCellSize() * 4 + 2 + parseInt(topEl.attr("offset"));
                                     _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) });
-									//alert(top);
+
                                     datapanel.append(_bar);
 
                                     break;
@@ -1443,58 +1289,7 @@
                     }
                 }, 500);
 
-                //                var $rightPanel = $(".fn-gantt .rightPanel");
-                //                var $dataPanel = $rightPanel.find(".dataPanel");
-                //                $dataPanel.stop();
-
-                //                var wrapper = { offset: $rightPanel.offset(),
-                //                    width: $rightPanel.width(),
-                //                    height: $rightPanel.height()
-                //                };
-
-                //                $(".fn-gantt .rightPanel .year, .fn-gantt .rightPanel .month").each(function (i, obj) {
-                //                    var objDim = { offset: $(obj).offset(),
-                //                        width: $(obj).width(),
-                //                        height: $(obj).height()
-                //                    };
-
-                //                    if (objDim.offset.left + objDim.width > wrapper.offset.left
-                //					        && objDim.offset.left < wrapper.offset.left + wrapper.width) {
-                //                        var viewArea = {
-                //                            left: objDim.offset.left > wrapper.offset.left ? objDim.offset.left : wrapper.offset.left,
-                //                            right: objDim.offset.left + objDim.width < wrapper.offset.left + wrapper.width ? objDim.offset.left + objDim.width : wrapper.offset.left + wrapper.width
-                //                        };
-                //                        $(obj).children(".fn-label").css("float", "left");
-                //                        var labelWidth = $(obj).children(".fn-label").width();
-
-                //                        var objMarg = objDim.offset.left < wrapper.offset.left ? wrapper.offset.left - objDim.offset.left : 0;
-                //                        if (viewArea.right - viewArea.left > labelWidth)
-                //                            $(obj).children(".fn-label")
-                //						    		.css("margin-left", objMarg + (viewArea.right - viewArea.left) / 2 - labelWidth / 2 + "px");
-                //                    }
-                //                });
-                //                $(".fn-gantt .rightPanel .bar").each(function (i, obj) {
-                //                    var objDim = { offset: $(obj).offset(),
-                //                        width: $(obj).width(),
-                //                        height: $(obj).height()
-                //                    };
-
-                //                    if (objDim.offset.left + objDim.width > wrapper.offset.left
-                //					        && objDim.offset.left < wrapper.offset.left + wrapper.width) {
-                //                        var viewArea = {
-                //                            left: objDim.offset.left > wrapper.offset.left ? objDim.offset.left : wrapper.offset.left,
-                //                            right: objDim.offset.left + objDim.width < wrapper.offset.left + wrapper.width ? objDim.offset.left + objDim.width : wrapper.offset.left + wrapper.width
-                //                        };
-                //                        $(obj).children(".fn-label").css("float", "left");
-                //                        var labelWidth = $(obj).children(".fn-label").width();
-
-                //                        var objMarg = objDim.offset.left < wrapper.offset.left ? wrapper.offset.left - objDim.offset.left : 0;
-                //                        if (viewArea.right - viewArea.left > labelWidth)
-                //                            $(obj).children(".fn-label")
-                //						    		.css("margin-left", objMarg + (viewArea.right - viewArea.left) / 2 - labelWidth / 2 + "px");
-                //                    }
-                //                });
-                //                core.synchronizeScroller(element);
+                
             },
             waitToggle: function (element, show, fn) {
                 if (show) {
@@ -1516,261 +1311,4 @@
                 }
             }
         };
-
-        /**
-        * Additional functions
-        */
-        var tools = {
-
-            getMaxDate: function (element) {
-                var maxDate = null;
-                $.each(element.data, function (i, entry) {
-                    $.each(entry.values, function (i, date) {
-                        maxDate = maxDate < tools.dateDeserialize(date.to) ? tools.dateDeserialize(date.to) : maxDate;
-                    });
-                });
-
-                switch (settings.scale) {
-                    case "hours":
-                        maxDate.setHours(Math.ceil((maxDate.getHours()) / element.scaleStep) * element.scaleStep);
-                        maxDate.setHours(maxDate.getHours() + element.scaleStep * 3);
-                        break;
-                    case "weeks":
-                        var bd = new Date(maxDate.getTime());
-                        var bd = new Date(bd.setDate(bd.getDate() + 3 * 7));
-                        var md = Math.floor(bd.getDate() / 7) * 7;
-                        maxDate = new Date(bd.getFullYear(), bd.getMonth(), md === 0 ? 4 : md - 3);
-                        break;
-                    case "months":
-                        var bd = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
-                        bd.setMonth(bd.getMonth() + 2);
-                        maxDate = new Date(bd.getFullYear(), bd.getMonth(), 1);
-                        break;
-                    default:
-                        maxDate.setHours(0);
-                        maxDate.setDate(maxDate.getDate() + 3);
-                        break;
-                }
-                return maxDate;
-            },
-            getMinDate: function (element) {
-                var minDate = null;
-                $.each(element.data, function (i, entry) {
-                    $.each(entry.values, function (i, date) {
-                        minDate = minDate > tools.dateDeserialize(date.from) || minDate === null ? tools.dateDeserialize(date.from) : minDate;
-                    });
-                });
-                switch (settings.scale) {
-                    case "hours":
-                        minDate.setHours(Math.floor((minDate.getHours()) / element.scaleStep) * element.scaleStep);
-                        minDate.setHours(minDate.getHours() - element.scaleStep * 3);
-                        break;
-                    case "weeks":
-                        var bd = new Date(minDate.getTime());
-                        var bd = new Date(bd.setDate(bd.getDate() - 3 * 7));
-                        var md = Math.floor(bd.getDate() / 7) * 7;
-                        minDate = new Date(bd.getFullYear(), bd.getMonth(), md === 0 ? 4 : md - 3);
-                        break;
-                    case "months":
-                        var bd = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
-                        bd.setMonth(bd.getMonth() - 3);
-                        minDate = new Date(bd.getFullYear(), bd.getMonth(), 1);
-                        break;
-                    default:
-                        minDate.setHours(0);
-                        minDate.setDate(minDate.getDate() - 3);
-                        //if (minDate.getDate() >= 27)
-                        //	minDate.setDate(minDate.getDate() - element.headerRows);
-                        break;
-                }
-                return minDate;
-            },
-            parseDateRange: function (from, to) {
-                var current = new Date(from.getTime());
-                var end = new Date(to.getTime()); ;
-                var ret = new Array();
-                var i = 0;
-                do {
-                    ret[i++] = new Date(current.getTime());
-                    current.setDate(current.getDate() + 1);
-                } while (current.getTime() <= to.getTime());
-                return ret;
-
-            },
-            parseTimeRange: function (from, to, scaleStep) {
-                var current = new Date(from);
-                var end = new Date(to);
-
-                var ret = new Array();
-                var i = 0;
-                do {
-                    ret[i] = new Date(current.getTime());
-                    current.setHours(current.getHours() + scaleStep);
-                    current.setHours(Math.floor((current.getHours()) / scaleStep) * scaleStep);
-
-                    if (current.getDay() != ret[i].getDay())
-                        current.setHours(0);
-
-                    i++;
-                } while (current.getTime() <= to.getTime());
-                return ret;
-            },
-            parseWeeksRange: function (from, to) {
-
-                var current = new Date(from);
-                var end = new Date(to);
-
-                var ret = new Array();
-                var i = 0;
-                do {
-
-                    if (current.getDay() === 0) {
-                        ret[i++] = current.getDayForWeek();
-                    }
-                    current.setDate(current.getDate() + 1);
-                } while (current.getTime() <= to.getTime());
-
-                return ret;
-            },
-            parseMonthsRange: function (from, to) {
-
-                var current = new Date(from);
-                var end = new Date(to);
-
-                var ret = new Array();
-                var i = 0;
-                do {
-                    ret[i++] = new Date(current.getFullYear(), current.getMonth(), 1);
-                    current.setMonth(current.getMonth() + 1);
-                } while (current.getTime() <= to.getTime());
-
-                return ret;
-            },
-            dateDeserialize: function (dateStr) {
-                //return eval("new" + dateStr.replace(/\//g, " "));
-                var date = eval("new" + dateStr.replace(/\//g, " "));
-                return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes());
-            },
-
-
-
-            genId: function (ticks) {
-                var t = new Date(ticks);
-                switch (settings.scale) {
-                    case "hours":
-                        var hour = t.getHours();
-
-                        if (arguments.length >= 2)
-                            hour = (Math.floor((t.getHours()) / arguments[1]) * arguments[1]);
-                        return (new Date(t.getFullYear(), t.getMonth(), t.getDate(), hour)).getTime();
-                        break;
-                    case "weeks":
-                        var y = t.getFullYear();
-                        var w = t.getDayForWeek().getWeekOfYear();
-                        var m = t.getMonth();
-                        if (m == 11 && w == 1) {
-                            y++;
-                        }
-
-                        return y + "-" + w;
-                        break;
-                    case "months":
-                        return t.getFullYear() + "-" + t.getMonth();
-                        break;
-                    default:
-                        return (new Date(t.getFullYear(), t.getMonth(), t.getDate())).getTime();
-                        break;
-                }
-            },
-            _getCellSize: null,
-            getCellSize: function () {
-                if (!tools._getCellSize) {
-                    $("body").append(
-						$('<div style="display: none; position: absolute;" class="fn-gantt" id="measureCellWidth"><div class="row"></div></div>')
-					);
-                    tools._getCellSize = $("#measureCellWidth .row").height();
-                    $("#measureCellWidth").empty().remove();
-                }
-                return tools._getCellSize*4;
-            },
-            getRightPanelSize: function () {
-                $("body").append(
-					$('<div style="display: none; position: absolute;" class="fn-gantt" id="measureCellWidth"><div class="rightPanel"></div></div>')
-				);
-                var ret = $("#measureCellWidth .rightPanel").height();
-                $("#measureCellWidth").empty().remove();
-                return ret;
-            },
-            getPageHeight: function (element) {
-                return element.pageNum + 1 === element.pageCount ? rowsOnLastPage * tools.getCellSize() : settings.itemsPerPage * tools.getCellSize();
-            },
-            _getProgressBarMargin: null,
-            getProgressBarMargin: function () {
-                if (!tools._getProgressBarMargin) {
-                    $("body").append(
-						$('<div style="display: none; position: absolute;" id="measureBarWidth" ><div class="fn-gantt"><div class="rightPanel"><div class="dataPanel"><div class="row day"><div class="bar" /></div></div></div></div></div>')
-					);
-                    tools._getProgressBarMargin = parseInt($("#measureBarWidth .fn-gantt .rightPanel .day .bar").css("margin-left").replace("px", ""));
-                    tools._getProgressBarMargin += parseInt($("#measureBarWidth .fn-gantt .rightPanel .day .bar").css("margin-right").replace("px", ""));
-                    $("#measureBarWidth").empty().remove();
-                }
-                return tools._getProgressBarMargin;
-            }
-        };
-
-        this.each(function () {
-
-            /**
-            * Extend options with default values
-            */
-            if (options)
-                $.extend(settings, options);
-
-            this.data = null;        // Recived data
-            this.pageNum = 0;        // Current page number
-            this.pageCount = 0;      // Aviable pages count
-            this.rowsOnLastPage = 0; // How many rows on last page
-            this.rowsNum = 0;        //
-            this.hPosition = 0;      // Current position on diagram (Horizontal)
-            this.dateStart = null;
-            this.dateEnd = null;
-            this.scrollClicked = false;
-            this.scaleOldWidth = null;
-
-            this.headerRows = null;
-
-            if (settings.useCookie) {
-                var sc = $.cookie(this.cookieKey + "CurrentScale");
-                if (sc) {
-                    settings.scale = $.cookie(this.cookieKey + "CurrentScale");
-                } else {
-                    $.cookie(this.cookieKey + "CurrentScale", settings.scale);
-                }
-            }
-
-            switch (settings.scale) {
-                case "hours": this.headerRows = 5; this.scaleStep = 1; break;
-                case "weeks": this.headerRows = 3; this.scaleStep = 13; break;
-                case "months": this.headerRows = 2; this.scaleStep = 14; break;
-                default: this.headerRows = 4; this.scaleStep = 13; break;
-            }
-
-            this.scrollNavigation = {
-                panelMouseDown: false,
-                scrollerMouseDown: false,
-                mouseX: null,
-                panelMargin: 0,
-                repositionDelay: 0,
-                panelMaxPos: 0,
-                canScroll: true
-            };
-
-            this.gantt = null;
-            this.loader = null;
-
-            core.create(this);
-
-        });
-
-    };
-})(jQuery);
+		

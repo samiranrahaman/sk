@@ -280,7 +280,7 @@
 				/*custom change*/
                 var ganttLeftPanel = $('<div class="leftPanel"/>')
 					.append($('<div class="row spacer"/>')
-					.css("height", (tools.getCellSize()/4) * element.headerRows + "px")
+					.css("height", tools.getCellSize() * element.headerRows + "px")
 					.css("width", "100%"));
 
                 var entries = [];
@@ -926,7 +926,7 @@
             createProgressBar: function (days, cls, desc, label, dataObj) {
                 var cellWidth = tools.getCellSize();
                 var barMarg = tools.getProgressBarMargin() || 0;
-                var bar = $('<div class="bar" label="'+label+'" h_diff="'+dataObj.h_diff+'" timestamp="'+dataObj.id+'" berth="'+dataObj.berth+'"  customClass="'+cls+'"><div class="fn-label">' + label + '</div></div>')
+                var bar = $('<div class="bar" label="'+label+'" timestamp="'+dataObj.id+'" berth="'+dataObj.berth+'"  customClass="'+cls+'"><div class="fn-label">' + label + '</div></div>')
 						.addClass(cls)
 						.css({
 						    width: ((cellWidth * days) - barMarg)
@@ -1187,10 +1187,8 @@
 
                                     // find row
                                     var topEl = $(element).find("#rowheader" + i);
-                                    //custom
-                                    /* var top = tools.getCellSize() * 4 + 2 + parseInt(topEl.attr("offset"));
-                                    _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) }); */
-									var top = tools.getCellSize() + 2 + parseInt(topEl.attr("offset"));
+                                    
+                                    var top = tools.getCellSize() * 4 + 2 + parseInt(topEl.attr("offset"));
                                     _bar.css({ 'margin-top': top, 'margin-left': Math.floor(cFrom) });
 									//alert(top);
                                     datapanel.append(_bar);

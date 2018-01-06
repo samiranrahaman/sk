@@ -1,1 +1,5 @@
 http://lp344.github.io/jQuery.Gantt/
+https://docs.dhtmlx.com/gantt/desktop__configuring_time_scale.html ****
+http://bootstrap-datepicker.readthedocs.io/en/latest/ *** datepicker
+
+https://codepen.io/jubitjoy/pen/owJooQ

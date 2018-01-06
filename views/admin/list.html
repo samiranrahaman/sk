@@ -5,51 +5,62 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>File Uploader - coligo.io</title>
-  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link href="css/styles.css" rel="stylesheet">
- 
+  <title>Add Details</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 </head>
 <body ng-app="myApp" ng-controller="namesCtrl">
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">WebSiteName</a>
+      <a class="navbar-brand" href="#">SkyDock</a>
     </div>
     <ul class="nav navbar-nav">
-      <li ><a href="/">Home</a></li>
-     <!-- <li><a href="/uploadfile">Upload</a></li>-->
-      <li class="active"><a href="/list">Image Gallery</a></li>
+      <li ><a href="/admin">Home</a></li>
+      <li class="active"><a href="/list">Listing</a></li>
     </ul>
   </div>
 </nav>
-
-<h2>Image Gallery</h2>
-  <div class="container">
+<div class="container">
   
-  <div class="search">
-Searc by Point:<input type="text" class="form-control input-sm" maxlength="64" placeholder="Search" ng-model="search.point" />
-</div>
-	
+   <!--<div class="search row">
+	Searc by Point:<input type="text" class="form-control input-sm" maxlength="64" placeholder="Search" ng-model="search.point" />
+	</div>
+	-->
   
   
   
   
     <div class="row panel panel-default">
-			  <div class="col-md-4" ng-repeat="x in names | filter:search">
-				<div class="thumbnail">
-					 <img ng-if="x.stat" src="https://samiran.herokuapp.com/folder1/{{x.name}}" alt="Lights" style="width:100%">
-					<img ng-if="!x.stat" src="https://samiran.herokuapp.com/archive/{{x.name}}" alt="Lights" style="width:100%">
-					<div class="caption">
-					  <p>{{x.folder}}(Point:{{x.point}})|<button ng-if="x.stat"  ng-click="deleteimage(x._id)">Delete</button></p>
-					</div>
-				  
+	          <div class="col-md-12">
+			    <div class="row" style="padding:  10px;background-color: blue;color: #fff;">
+				   <div class="col-md-2">Tripid</div>
+				   <div class="col-md-2">Name</div>
+				   <div class="col-md-2">Prod</div>
+				   <div class="col-md-2">Vol</div>
+				    <div class="col-md-1">Rate</div>
+					 <div class="col-md-1">IMEX</div>
+					 <div class="col-md-1">berth</div>
+					 
+				   <div class="col-md-1">Action</div>
 				</div>
 			  </div>
-			 <div ng-show="!names.length">No Result Found!</div>
+			  <div class="col-md-12" ng-repeat="x in chart | filter:search">
+			    <div class="row" style="padding: 10px;">
+				   <div class="col-md-2">{{x.tripid}}</div>
+				   <div class="col-md-2">{{x.name}}</div>
+				   <div class="col-md-2">{{x.prod}}</div>
+				   <div class="col-md-2">{{x.vol}}</div>
+				   <div class="col-md-1">{{x.rate}}</div>
+				   <div class="col-md-1">{{x.IMEX}}</div>
+				   <div class="col-md-1">{{x.berth}}</div>
+				   <div class="col-md-1"><button ng-click="delete_event(x.timestamp)" >Delete</button></div>
+				</div>
+			  </div>
+			 <div ng-show="!chart.length" style="padding: 15px 19px 17px 21px;">No Result Found!</div>
   
-</div>
+     </div>
   </div>
   
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -61,24 +72,26 @@ app.controller('namesCtrl',function($scope,$http,$location){
 
               // $scope.names = [{"id": "1001878",},{"id": "100343",}];
                //$http({method: 'GET', url: 'http://localhost:3000/listview'}).success(function(data8) {}); 
-                $http({method: 'GET', url: 'https://samiran.herokuapp.com/listview'}).success(function(response) 
+                $http({method: 'GET', url: 'http://localhost:5000/skydock_schudle/946665000000/2524588200000'}).success(function(response) 
 				{
-				$scope.names = response;		
+				$scope.chart = response;
+					console.log(response)				
 				}); 
 
 
-			$scope.deleteimage = function(str) {
-					//alert(str);
-					$http({method: 'GET', url: 'https://samiran.herokuapp.com/remove/'+str}).success(function(response) 
-				{
-				//$scope.names = response;
-				//$scope.$apply();	
-				//$location.path('/list');	
-				window.location = "https://samiran.herokuapp.com/list"				
-				},1000);
+			$scope.delete_event = function(str) {
+			       var result = confirm("Du you Want to delete?");
+					if (result) {
+						
+						//console.log('http://localhost:5000/remove/'+str);
+						$http({method: 'GET', url: 'http://localhost:5000/remove/'+str}).success(function(response) 
+							{
+							alert("Delete Successful");
+							window.location = "http://localhost:5000/list"				
+							},1000);
 				
-				//$window.location.href = 'http://localhost:3000/list';				
-				
+								
+						}
 		
 				};	
 

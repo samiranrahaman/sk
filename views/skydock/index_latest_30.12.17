@@ -1,0 +1,360 @@
+<html lang="en-au"><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="http://fiddle.jshell.net/js/lib/mootools-core-1.4.5-nocompat.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://fiddle.jshell.net/css/normalize.css">
+   <link rel="stylesheet" type="text/css" href="http://fiddle.jshell.net/css/result-light.css">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    
+  
+    
+      <script type="text/javascript" src="javascripts/jquery.fn.gantt.js"></script>
+    
+  
+    
+      <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>
+    
+  
+    
+      <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js"></script>
+    
+  
+    
+      <script type="text/javascript" src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
+    
+  
+    
+      <link rel="stylesheet" type="text/css" href="http://taitems.github.com/jQuery.Gantt/css/style.css">
+    
+  
+    
+      <link rel="stylesheet" type="text/css" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    
+  
+    
+      <link rel="stylesheet" type="text/css" href="http://taitems.github.com/UX-Lab/core/css/prettify.css">
+    
+  
+    
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+	   <script type="text/javascript" src="http://momentjs.com/downloads/moment.js"></script>
+	  
+    
+  
+
+  <style type="text/css">
+    
+  </style>
+
+  <title></title>
+
+  
+    
+<style>
+/*.fn-gantt .leftPanel {
+    float: left;
+    width: 608px;
+    overflow: hidden;
+    border-right: 1px solid #DDD;
+    position: relative;
+    z-index: 20;
+}
+.fromdate, .todate {
+    background-color: #f6f6f6;
+}
+.fn-gantt .navigate {
+    border-top: 1px solid #DDD;
+    padding: 10px 0 10px 587px;
+}
+
+.fn-gantt .leftPanel .fn-wide, .fn-gantt .leftPanel .fn-wide .fn-label {
+    width: 76px;
+}
+.fn-gantt .leftPanel .name {
+    width: 76px;
+    font-weight: bold;
+} */
+.fn-gantt .leftPanel .name {
+    width: 100%;
+    font-weight: bold;
+}
+.Black {background-color: #000000 !important; }
+.Blue {background-color: #0000ff !important; }
+.Yellow {background-color: #ffff00 !important; }
+.Green {background-color: #008000 !important; }
+.limegreen {background-color: #32CD32 !important; }
+.Orange {background-color: #FFA500 !important; }
+.Red {background-color: #FF0000 !important; }
+
+</style>
+
+
+
+<script type="text/javascript">//<![CDATA[
+window.addEvent('load', function() {
+        $(function() {
+
+            "use strict";
+			 $.ajax({url: "http://localhost:5000/skydock_schudle_chart", success: function(result){
+       // gantt start
+	   $(".gantt").gantt({
+				source: 
+				result,	
+				navigate: "scroll",
+				scale: "days",
+				maxScale: "months",
+				minScale: "days",
+				itemsPerPage: 10,
+				//holidays: [new Date('2011/11/01')],
+				draggable: true,
+				useCookie: true,
+				scrollToToday: false,
+				onItemClick: function(data) {
+								//alert("Item clicked - "+data.id+"show some details");
+								
+							},
+				onAddClick: function(dt, rowId) {
+							   
+							   var date = new Date(parseInt(dt));
+							   alert("Empty space clicked - add an item!"+date);
+							},
+				onRender: function(dt, rowId) {
+								
+								$('.Blue,.Yellow,.Black,.Green,.limegreen,.Orange,.Red').draggable({
+									//axis:'x',
+									//axis:'y',
+									start: function(event, ui) {
+										$(this).data("startx",$(this).offset().left);
+									},
+									stop: function(event, ui) {
+										var change = $(this).offset().left - $(this).data("startx");
+										//alert(change);
+										alert("Item clicked - "+data.id+"show some details");
+								
+										var value = $(this).css('margin-left');
+										if(value=='0px')
+										{
+										var value = $(this).css('left');
+										
+										//alert(value);
+										//value = value.split("px");
+										//value = parseInt(value[0]) + change;
+									   // alert(value);							
+										$(this).css('margin-left', value);
+										$(this).css('left', '');
+										//$(this).css('left',value);
+										}
+										else
+										{
+										 // alert(value);
+										value = value.split("px");
+										value = parseInt(value[0]) + change;
+										//alert(value);							
+										$(this).css('margin-left', value);
+										//$(this).css('left', '');
+										$(this).css('left','');
+										}
+										
+									}                    
+								});
+								
+								
+								 
+								
+							}
+
+							
+			});
+	   //End
+    
+           
+           }});
+		  
+            prettyPrint();
+			
+			
+                
+        });
+});//]]> 
+
+</script>
+
+  
+</head>
+
+<body style="cursor: auto;">
+  
+    
+        <title>Motiva Port Arthur Docks</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
+        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+        <link rel="stylesheet" href="http://taitems.github.com/UX-Lab/core/css/prettify.css">
+        <script type="text/javascrtipt" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+        <style type="text/css">
+            body {
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 13px;
+                padding: 0 0 50px 0;
+            }
+            .contain {
+                width: 800px;
+                margin: 0 auto;
+            }
+            h1 {
+                margin: 40px 0 20px 0;
+            }
+            h2 {
+                font-size: 1.5em;
+                padding-bottom: 3px;
+                border-bottom: 1px solid #DDD;
+                margin-top: 50px;
+                margin-bottom: 25px;
+            }
+            table th:first-child {
+                width: 150px;
+            }
+        </style>
+    
+    
+        <h2>Motiva Port Arthur Docks</h2>
+		<div class="gantt"></div>
+		
+		
+<br>		
+<link rel="stylesheet" type="text/css" href="https://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.css">
+<!--<link rel="stylesheet" type="text/css" href="https://handsontable.com/static/css/main.css">-->
+<script src="https://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
+
+<div id="hot"></div>
+<script>
+
+ $.ajax({url: "http://localhost:5000/skydock_schudle", success: function(result){
+            console.log(result);
+             var dataObject = result;
+			 /*
+var dataObject = 
+[{"_id":"5a2d2aea60fb6a1af4daefbc","tripid":"TaskId","name":"OPEN","prod":"GAS","vol":"11","rate":"111","berth":"2","fromdate":"01/04/2018 6:08 PM","todate":"12/02/2017 6:09 PM","span":"120"},{"_id":"5a2d2b1b60fb6a1af4daefbe","tripid":"TaskId","name":"AmPride","prod":"GAS","vol":"120","rate":"111","berth":"6A","fromdate":"12/27/2017 6:09 PM","todate":"01/06/2018 6:09 PM","span":"120"},{"_id":"5a2d2b4760fb6a1af4daefc0","tripid":"TaskId","name":"OPEN","prod":"GAS","vol":"120","rate":"1","berth":"2","fromdate":"12/30/2017 6:10 PM","todate":"01/13/2018 6:10 PM","span":"120"},{"_id":"5a2d2bc3a0c5e01660e44723","tripid":"TaskId","name":"OPEN","prod":"GAS","vol":"120","rate":"11","berth":"2","fromdate":"01/06/2018 6:12 PM","todate":"12/29/2017 6:12 PM","span":"120"},{"_id":"5a2d2c0b77120a0ac40e0b84","tripid":"TaskId","name":"OPEN","prod":"GAS","vol":"11","rate":"111","berth":"6A","fromdate":"12/11/2017 6:13 PM","todate":"01/06/2018 6:13 PM","span":"120"}];*/
+
+
+
+/*[
+  {
+    id: 1,
+    flag: 'EUR',
+    currencyCode: 'EUR',
+    currency: 'Euro',
+    level: 0.9033,
+    units: 'EUR / USD',
+    asOf: '08/19/2015',
+    onedChng: 0.0026
+  },
+  {
+    id: 2,
+    flag: 'JPY',
+    currencyCode: 'JPY',
+    currency: 'Japanese Yen',
+    level: 124.3870,
+    units: 'JPY / USD',
+    asOf: '08/19/2015',
+    onedChng: 0.0001
+  }
+]
+;*/
+/*
+var currencyCodes = ['EUR', 'JPY', 'GBP', 'CHF', 'CAD', 'AUD', 'NZD', 'SEK', 'NOK', 'BRL', 'CNY', 'RUB', 'INR', 'TRY', 'THB', 'IDR', 'MYR', 'MXN', 'ARS', 'DKK', 'ILS', 'PHP'];*/
+var flagRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+  var currencyCode = value;
+  while (td.firstChild) {
+    td.removeChild(td.firstChild);
+  }
+  /*if (currencyCodes.indexOf(currencyCode) > -1) {
+    var flagElement = document.createElement('DIV');
+    
+    flagElement.className = 'flag ' + currencyCode.toLowerCase();
+    td.appendChild(flagElement);
+  } else {
+    var textNode = document.createTextNode(value === null ? '' : value);
+    
+    td.appendChild(textNode);
+  }*/
+};
+var hotElement = document.querySelector('#hot');
+var hotElementContainer = hotElement.parentNode;
+var hotSettings = {
+  data: dataObject,
+  columns: [
+    {
+      data: 'tripid',
+      type: 'text'
+    },
+    {
+      data: 'name',
+	  type: 'text'
+    },
+    {
+      data: 'prod',
+      type: 'text'
+    },
+    {
+      data: 'vol',
+      type: 'numeric'
+    },
+    {
+      data: 'rate',
+      type: 'numeric',
+    },
+    {
+      data: 'berth',
+      type: 'text'
+    },
+    {
+      data: 'fromdate',
+      type: 'date',
+      dateFormat: 'MM/DD/YYYY'
+    },
+	{
+      data: 'fromdate',
+      type: 'date',
+      dateFormat: 'MM/DD/YYYY'
+    },
+    {
+      data: 'span',
+      type: 'text'
+    }
+  ],
+  stretchH: 'all',
+  width: 1500,
+  autoWrapRow: true,
+  height: 500,
+  maxRows: 22,
+  manualRowResize: true,
+  manualColumnResize: true,
+  rowHeaders: true,
+  colHeaders: [
+    'TripId',
+    'Name',
+    'Prod',
+    'Vol',
+    'Rate',
+    'Berth',
+    'Start Date',
+    'End Date',
+	'Span'
+  ],
+  manualRowMove: true,
+  manualColumnMove: true,
+  contextMenu: true,
+  filters: true,
+  dropdownMenu: true
+};
+var hot = new Handsontable(hotElement, hotSettings);
+            }});
+
+</script>
+
+ 
+
+</body></html>

@@ -22,7 +22,6 @@
     </div>
     <ul class="nav navbar-nav">
       <li class="active"><a href="/admin">Home</a></li>
-     <!-- <li><a href="/uploadfile">Upload</a></li>-->
       <li><a href="/list">Listing</a></li>
     </ul>
   </div>
@@ -71,10 +70,18 @@
 				  <option value="2">2</option>
 				  <option value="6A">6A</option>
 				  <option value="6B">6B</option>
-				  <option value="7">7</option>
+				  <option value="7A">7A</option>
+				   <option value="7B">7B</option>
 				  <option value="NS">NS</option>
 				  <option value="PNT">PNT</option>
 				  
+				</select>
+			  </div>
+			   <div class="form-group">
+				<label for="email">IMEX :</label>
+				<select name="IMEX">
+				  <option value="IM ">IM </option>
+				  <option value="EX">EX</option>
 				</select>
 			  </div>
 			    <div class="form-group">
@@ -85,14 +92,14 @@
                     </span>
 					</div>
 				</div>
-				 <div class="form-group">
+				 <!--<div class="form-group">
 					<div class='input-group date' id='datetimepicker2' style="width: 19%;">
 						<input type='text' name="endtime" class="form-control" />
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
-				</div>
+				</div>-->
 				<div class="form-group">
 				<label for="email">Priority:</label>
 				<select name="priority">
@@ -129,9 +136,12 @@
             $(function () {
                $('#datetimepicker1').datetimepicker({
                    // locale: 'us'
+				   //format : 'DD/MM/YYYY HH:mm'
+				   format : 'MM/DD/YYYY HH:mm'
                 });
 				 $('#datetimepicker2').datetimepicker({
                   //  locale: 'us'
+				  format : 'MM/DD/YYYY HH:mm'
                 });
             });
         </script>

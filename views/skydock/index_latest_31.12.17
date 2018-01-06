@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)http://lp344.github.io/jQuery.Gantt/ -->
+<html lang="en-au"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>jQuery.Gantt</title>
+		
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1">
+		<link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/jquery-ui-1.8.20.custom.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/prettify.css">
+		<style type="text/css">
+			body {
+				font-family: Helvetica, Arial, sans-serif;
+				font-size: 13px;
+				padding: 0 0 50px 0;
+			}
+			.contain {
+				width: 880px;
+				margin: 0 auto;
+			}
+			h1 {
+				margin: 40px 0 20px 0;
+			}
+			h2 {
+				font-size: 1.5em;
+				padding-bottom: 3px;
+				border-bottom: 1px solid #DDD;
+				margin-top: 50px;
+				margin-bottom: 25px;
+			}
+			table th:first-child {
+				width: 150px;
+			}
+			.fn-gantt .leftPanel {
+				width: 115px !important;
+				}
+			.contain {
+				width: 100% !important;
+			}
+		</style>
+    </head>
+    <body style="cursor: auto;">
+         <h1>SkyDock</h1>
+		<div class="contain">
+		    <h2>Motiva Port Arthur Docks</h2>
+			<div class="gantt"></div>
+		</div>
+		<div class="content">
+		  <h2>SkyDock Schudle Table</h2>
+			<link rel="stylesheet" type="text/css" href="https://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.css">
+			<!--<link rel="stylesheet" type="text/css" href="https://handsontable.com/static/css/main.css">-->
+			<script src="https://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.min.js"></script>
+
+			<div id="hot"></div>
+			
+		</div>
+
+    
+	<script src="javascripts/jquery-1.7.2.min.js"></script>
+    <script src="javascripts/jquery-ui-1.8.20.custom.min.js"></script>
+    <script src="javascripts/jquery.cookie.js"></script>
+    <script src="javascripts/jquery.fn.gantt.js"></script>
+	<script src="javascripts/bootstrap-tooltip.js"></script>
+	<script src="javascripts/bootstrap-popover.js"></script>
+	<script src="javascripts/prettify.js"></script>
+	<script src="javascripts/core.js"></script>
+	<script type="text/javascript">
+	   /* function diff_hours(dt2, dt1) 
+		 {
+
+		  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+		  diff /= (60 * 60);
+		  //return Math.abs(Math.round(diff));
+		  return Math.abs(diff);
+		 }
+		dt1 = new Date("12/15/2017 6:07 AM"); 
+		dt2 = new Date("12/16/2017 6:10 PM"); 
+		var h_diff=diff_hours(dt1, dt2);
+		//console.log(diff_hours(dt1, dt2));
+		h_diff_val = h_diff.toString().split(".");
+		
+		var h=parseInt(h_diff_val[0]);
+		//console.log(h);
+		var min=h_diff_val[1];
+		//console.log(min);
+		var d=0;
+		var hours=0;
+		if(h>24)
+		{
+		d=h/24;
+		hours=h%24;
+		
+		//console.log(d);
+		//console.log(hours);
+		
+		}
+		
+		var span=d+" "+hours +" "+min;
+		console.log(span);*/
+		
+		</script>
+    <script>
+          //var datum = Date.parse("12/15/2017 6:07 PM");
+		  //alert(datum);
+		  
+		  
+        $(function () {
+
+            "use strict";
+             $.ajax({url: "http://localhost:5000/skydock_schudle_chart", success: function(result){
+            $(".gantt").gantt({
+                source: 
+				result,
+				/*[{ id: 0,
+                    name: "Test 0",
+                    desc: "Desc 0",
+                    cssClass: "ganttDarkBlue",
+                    values: [
+                       
+                            {
+                                from: "/Date(1347982749466)/",
+                                to: "/Date(1349192349466)/",
+                                label: "Item 0 - 10",
+                                customClass: "ganttTurquoise",
+                                desc: "Item 0 - 10<br>18.09.2012 15:39:09 - 02.10.2012 15:39:09<br>Test 0",
+                                dataObj:
+                                {
+                                    id: 1003
+                                }
+                            },
+							{
+                                from: "/Date(1351265949466)/",
+                                to: "/Date(1351870749466)/",
+                                label: "Item 0 - 10",
+                                customClass: "ganttTurquoise",
+                                desc: "Item 0 - 10<br>18.09.2012 15:39:09 - 02.10.2012 15:39:09<br>Test 0",
+                                dataObj:
+                                {
+                                    id: 1003
+                                }
+                            }
+							]
+                            }
+                            ,
+                            { id: 2,
+                                name: "Test 2",
+                                desc: "Desc 2",
+                                cssClass: "ganttOrange2",
+                                values: [
+                            
+                            {
+                                from: "/Date(1351265949466)/",
+                                to: "/Date(1351870749466)/",
+                                label: "Item 2 - 10",
+                                customClass: "ganttTurquoise",
+                                desc: "Item 2 - 10<br>26.10.2012 15:39:09 - 02.11.2012 15:39:09<br>Test 2",
+                                dataObj:
+                                {
+                                    id: 1006
+                                }
+                            },
+                            {
+                                from: "/Date(1353685149466)/",
+                                to: "/Date(1355499549466)/",
+                                label: "Item 2 - 10",
+                                customClass: "ganttWhite",
+                                desc: "Item 2 - 10<br>23.11.2012 15:39:09 - 14.12.2012 15:39:09<br>Test 2",
+                                dataObj:
+                                {
+                                    id: 1007
+                                }
+                            }]
+                            }
+                            
+                            
+                            ],*/
+                navigate: "scroll",
+                //scale: "weeks",
+				scale: "days",
+                maxScale: "months",
+                minScale: "days",
+                itemsPerPage: 10,
+                draggable: true,
+                useCookie: true,
+                scrollToToday: false,
+                onItem: [
+                            {
+                                event: 'click',
+                                func: function (e, data) {
+                                    var i = data.id;
+                                  // alert("Would call out to server for editing item " + i);
+								  
+                                }
+                            },
+                               {
+                                   event: 'mouseover',
+                                   func: function (e, data) {
+                                      // $("#mouseover").html("Hover over item: " + data.id);
+                                       
+                                   }
+                               },
+                               {
+                                   event: 'resize',
+                                   func: function (e, data, newValues) {
+                                       
+                                       var startdate = new Date(parseInt(newValues.startDate));
+                                       var enddate = new Date(parseInt(newValues.endDate));
+                                       alert("Resizing Item: " + data.id + "          StartDate: " + startdate + "       EndDate:" + enddate);
+                                   }
+                               }
+                            ],
+                
+                onEmptyCell: [
+                            {
+                                event: 'mouseover',
+                                func: function (dt, rowId) {
+                                    var date = new Date(parseInt(dt));
+                                    $("#mouseover").html("Position: " + date);
+                                    //alert("Click on empty cell: Would call out to server for adding a new entry on Date: " + date + "          DateDouble: " + dt + "       RowId:" + rowId);
+                                }
+                            },
+                               {
+                                   event: 'dblclick',
+                                   func: function (dt, rowId) {
+                                       var date = new Date(parseInt(dt));
+                                       alert("Double Click on empty cell:Would call out to server for adding a new entry on Date: " + date + "          DateDouble: " + dt + "       RowId:" + rowId);
+                                   }
+                               }
+                            ],
+                onComplete : function (element,e) {
+                    //$("#msg").html("Ready");
+					
+					//$('.ganttLightGreen , .ganttSiena ,.ganttLilac  , .ganttTurquoise ').draggable({
+					$('.Blue,.Yellow,.Black,.Green,.limegreen,.Orange,.Red').draggable({
+									//axis:'x',
+									//axis:'y',
+									start: function(event, ui) {
+										var x=$(this).data("startx",$(this).offset().left);
+										//alert(x);
+									},
+									stop: function(event, ui) {
+									
+									    //get value dragg
+										
+										var corrY;
+										var datapanel = $(".fn-gantt .rightPanel .dataPanel");
+										//var leftpanel = $(".fn-gantt .rightPanel .leftPanel");
+										
+										var settings_scale="days";
+										switch (settings_scale) {
+											case "weeks":
+												//corrY = tools.getCellSize() * 2;
+												break;
+											case "months":
+												//corrY = tools.getCellSize();
+												break;
+											case "hours":
+											case "days":
+												corrY = 24 * 3;
+												break;
+											default:
+												//corrY = tools.getCellSize() * 2;
+												break;
+										}
+										var startDate, endDate;
+
+										// resize to the right --> change endDate
+
+										// Adjust, so get middle of elm
+										// corrY -= Math.floor(tools.getCellSize() / 2);
+
+										
+                                        //alert(col.val());
+										
+										//var row = core.elementFromPoint(leftpanel.offset().left + leftpanel.width() - 10, e.pageY);
+										//var row = core.elementFromPoint($(this).offset().left + $(this).width() - 10,event.pageY);
+										//var leftpanel = $(element).find(".fn-gantt .leftPanel");
+										//var row = core.elementFromPoint(leftpanel.offset().left + leftpanel.width() - 10,event.pageY);
+										//alert(row.className.indexOf("fn-label"));
+										// hit the label?
+										/*if (row.className.indexOf("fn-label") == 0) {
+											row = $(row.parentNode);
+										} else {
+											row = $(row);
+										}
+										var rowId = row.id;*/
+										//alert(event.pageY);
+										//alert (leftpanel.offset().left);
+										//alert(leftpanel.width());
+										//alert (rowId);
+										
+										
+										//find column
+										/*var col = core.elementFromPoint(event.pageX, datapanel.offset().top + corrY);
+										// hit the label?
+										if (col.className == "fn-label") {
+											col = $(col.parentNode);
+										} else {
+											col = $(col);
+										}*/
+										
+										// left or right resize
+										/*alert(event.pageX);
+										alert (datapanel.offset().top);
+										alert (corrY);*/
+										
+										
+										
+										/*if (ui.originalPosition.left == ui.position.left) {
+										    
+											var col = core.elementFromPoint(event.pageX, datapanel.offset().top + corrY);
+												// hit the label?
+												if (col.className == "fn-label") {
+													col = $(col.parentNode);
+												} else {
+													col = $(col);
+												}
+											
+											endDate = col.attr("repdate");
+											var endDate1 = new Date(parseInt(endDate));
+											alert(endDate1);
+											startDate = "";
+
+										} 
+										if(ui.originalPosition.right == ui.position.right) {
+										
+										   var col = core.elementFromPoint(event.pageX, datapanel.offset().top + corrY);
+											// hit the label?
+											if (col.className == "fn-label") {
+												col = $(col.parentNode);
+											} else {
+												col = $(col);
+											}
+											startDate = col.attr("repdate");
+										 	var startDate1 = new Date(parseInt(startDate));
+											alert(startDate1);
+											endDate = "";
+										}*/
+										//end value after dragg
+									
+									
+										var change = $(this).offset().left - $(this).data("startx");
+										
+										var value = $(this).css('margin-left');
+										if(value=='0px')
+										{
+										var value = $(this).css('left');
+										
+										//alert(value);
+										//value = value.split("px");
+										//value = parseInt(value[0]) + change;
+									   // alert(value);							
+										$(this).css('margin-left', value);
+										$(this).css('left', '');
+										//$(this).css('left',value);
+										}
+										else
+										{
+										 // alert(value);
+										value = value.split("px");
+										value = parseInt(value[0]) + change;
+										//alert(value);							
+										$(this).css('margin-left', value);
+										//$(this).css('left', '');
+										$(this).css('left','');
+										}
+										
+										
+										var margin_top= $(this).css('margin-top');
+										var top_2= $(this).css('top');
+										var margin_top_value = margin_top.split("px");
+										var top_2_value = top_2.split("px");
+										 var current_yaxis=parseInt(margin_top_value[0]) + parseInt(top_2_value[0]);
+										//alert(current_yaxis);
+										
+										var col_margin_left = $(this).css('margin-left');
+										var col_width = $(this).css('width');
+										var col_margin_left_val = col_margin_left.split("px");
+										var col_width_val = col_width.split("px");
+										var start_point=parseInt(col_margin_left_val[0])+parseInt(col_width_val[0])-19;
+										var end_point=(parseInt(col_margin_left_val[0])+(parseInt(col_width_val[0])*2)-27); 
+										
+										//alert(start_point);
+										//alert(end_point);
+										console.log(start_point)
+										console.log(end_point)
+										console.log(event.pageX)
+										console.log (datapanel.offset().top);
+										console.log (corrY);
+										
+										var col = core.elementFromPoint(start_point, datapanel.offset().top + corrY);
+												// hit the label?
+												if (col.className == "fn-label") {
+													col = $(col.parentNode);
+												} else {
+													col = $(col);
+												}
+											
+											startDate = col.attr("repdate");
+											var startDate1 = new Date(parseInt(startDate));
+											//alert(startDate1);
+											console.log(startDate1)
+											//startDate = "";
+									  
+									  var col = core.elementFromPoint(end_point, datapanel.offset().top + corrY);
+												// hit the label?
+												if (col.className == "fn-label") {
+													col = $(col.parentNode);
+												} else {
+													col = $(col);
+												}
+											
+											endDate = col.attr("repdate");
+											var endDate1 = new Date(parseInt(endDate));
+											//alert(endDate1);
+											//startDate = "";
+										    console.log(endDate1)
+										
+										
+										
+									}                    
+								});
+					
+					
+                }
+            });
+
+            prettyPrint();
+			}});
+
+        });
+
+		
+    </script>
+    <script>
+
+			 $.ajax({url: "http://localhost:5000/skydock_schudle", success: function(result){
+						console.log(result);
+						 var dataObject = result;
+
+			
+			var flagRenderer = function (instance, td, row, col, prop, value, cellProperties) {
+			  var currencyCode = value;
+			  while (td.firstChild) {
+				td.removeChild(td.firstChild);
+			  }
+			  /*if (currencyCodes.indexOf(currencyCode) > -1) {
+				var flagElement = document.createElement('DIV');
+				
+				flagElement.className = 'flag ' + currencyCode.toLowerCase();
+				td.appendChild(flagElement);
+			  } else {
+				var textNode = document.createTextNode(value === null ? '' : value);
+				
+				td.appendChild(textNode);
+			  }*/
+			};
+			var hotElement = document.querySelector('#hot');
+			var hotElementContainer = hotElement.parentNode;
+			var hotSettings = {
+			  data: dataObject,
+			  columns: [
+				{
+				  data: 'tripid',
+				  type: 'text'
+				},
+				{
+				  data: 'name',
+				  type: 'text'
+				},
+				{
+				  data: 'prod',
+				  type: 'text'
+				},
+				{
+				  data: 'vol',
+				  type: 'numeric'
+				},
+				{
+				  data: 'rate',
+				  type: 'numeric',
+				},
+				{
+				  data: 'berth',
+				  type: 'text'
+				},
+				{
+				  data: 'fromdate',
+				  type: 'date',
+				  dateFormat: 'MM/DD/YYYY'
+				},
+				{
+				  data: 'fromdate',
+				  type: 'date',
+				  dateFormat: 'MM/DD/YYYY'
+				},
+				{
+				  data: 'span',
+				  type: 'text'
+				}
+			  ],
+			  stretchH: 'all',
+			  width: 1500,
+			  autoWrapRow: true,
+			  height: 500,
+			  maxRows: 22,
+			  manualRowResize: true,
+			  manualColumnResize: true,
+			  rowHeaders: true,
+			  colHeaders: [
+				'TripId',
+				'Name',
+				'Prod',
+				'Vol',
+				'Rate',
+				'Berth',
+				'Start Date',
+				'End Date',
+				'Span'
+			  ],
+			  manualRowMove: true,
+			  manualColumnMove: true,
+			  contextMenu: true,
+			  filters: true,
+			  dropdownMenu: true
+			};
+			var hot = new Handsontable(hotElement, hotSettings);
+						}});
+
+			</script>
+	</body></html>

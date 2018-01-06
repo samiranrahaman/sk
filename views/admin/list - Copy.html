@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>File Uploader - coligo.io</title>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link href="css/styles.css" rel="stylesheet">
+ 
+</head>
+<body ng-app="myApp" ng-controller="namesCtrl">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">WebSiteName</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li ><a href="/">Home</a></li>
+     <!-- <li><a href="/uploadfile">Upload</a></li>-->
+      <li class="active"><a href="/list">Image Gallery</a></li>
+    </ul>
+  </div>
+</nav>
+
+<h2>Image Gallery</h2>
+  <div class="container">
+  
+  <div class="search">
+Searc by Point:<input type="text" class="form-control input-sm" maxlength="64" placeholder="Search" ng-model="search.point" />
+</div>
+	
+  
+  
+  
+  
+    <div class="row panel panel-default">
+			  <div class="col-md-4" ng-repeat="x in names | filter:search">
+				<div class="thumbnail">
+					 <img ng-if="x.stat" src="https://samiran.herokuapp.com/folder1/{{x.name}}" alt="Lights" style="width:100%">
+					<img ng-if="!x.stat" src="https://samiran.herokuapp.com/archive/{{x.name}}" alt="Lights" style="width:100%">
+					<div class="caption">
+					  <p>{{x.folder}}(Point:{{x.point}})|<button ng-if="x.stat"  ng-click="deleteimage(x._id)">Delete</button></p>
+					</div>
+				  
+				</div>
+			  </div>
+			 <div ng-show="!names.length">No Result Found!</div>
+  
+</div>
+  </div>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</body>
+<script>
+//var app=angular.module("myApp",['ui.bootstrap','ngRoute']);
+var app=angular.module("myApp",[]);
+app.controller('namesCtrl',function($scope,$http,$location){
+
+              // $scope.names = [{"id": "1001878",},{"id": "100343",}];
+               //$http({method: 'GET', url: 'http://localhost:3000/listview'}).success(function(data8) {}); 
+                $http({method: 'GET', url: 'https://samiran.herokuapp.com/listview'}).success(function(response) 
+				{
+				$scope.names = response;		
+				}); 
+
+
+			$scope.deleteimage = function(str) {
+					//alert(str);
+					$http({method: 'GET', url: 'https://samiran.herokuapp.com/remove/'+str}).success(function(response) 
+				{
+				//$scope.names = response;
+				//$scope.$apply();	
+				//$location.path('/list');	
+				window.location = "https://samiran.herokuapp.com/list"				
+				},1000);
+				
+				//$window.location.href = 'http://localhost:3000/list';				
+				
+		
+				};	
+
+
+			
+});
+
+
+
+
+</script>
+</html>

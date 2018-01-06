@@ -17,9 +17,7 @@ var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 
  
 
 
- //var mongodbUri = 'mongodb://samiran1109:samiran@ds029456.mlab.com:29456/samirandb';
- var mongodbUri = 'mongodb://fitdrill:B3HZW0Ta#G@172.93.55.218/skydock';
- 
+ var mongodbUri = 'mongodb://samiran1109:samiran@ds029456.mlab.com:29456/samirandb';
  mongoose.connect(mongodbUri, options);
 var conn = mongoose.connection; 
 
@@ -54,12 +52,12 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname, 'views/skydock/index.html'));
  
 });
-app.get('/list', function(req, res){
+/* app.get('/list', function(req, res){
 
- res.sendFile(path.join(__dirname, 'views/admin/list.html'));
+ res.sendFile(path.join(__dirname, 'views/list.html'));
  
   
-}); 
+}); */
 app.get('/admin', function(req, res){
 
  res.sendFile(path.join(__dirname, 'views/admin/index.html'));
@@ -75,37 +73,18 @@ console.log(req.body.user.name);
 app.post('/admin', urlencodedParser, function (req, res) {
   if (!req.body) return res.sendStatus(400)
  
-    var IMEX =req.body.IMEX;
-	console.log(IMEX);
-	var vol=req.body.vol;
-	var rate=req.body.rate;
-	var cal=(parseInt(vol)/parseInt(rate)) + 4;
-	var h_diff=Math.round(cal);
-	console.log(cal);
-	console.log(h_diff);
-	
-	var startdate=req.body.starttime;
-	
-	console.log(startdate);
-	
-	  var date = new Date(startdate);
-	  date.setHours(date.getHours() + h_diff);
-	  var endDate =date.toString();
-	  console.log(date);
-	  var endDate_string=""+(date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes();
-	  console.log(endDate_string);
-	
-      var datum = Date.parse(req.body.starttime);
+
+     var datum = Date.parse(req.body.starttime);
 	 //var starttime_tm=datum/1000;
 	 var starttime_tm=datum;
 	
-	 var datum2 = Date.parse(endDate_string);
+	 var datum2 = Date.parse(req.body.endtime);
 	 //var endtime_tm=datum2/1000;
 	 var endtime_tm=datum2;
 	 //console.log(starttime_tm);
-     console.log(endtime_tm); 
+     //console.log(endtime_tm);
 	 
-	   /* function diff_hours(dt2, dt1) 
+	   function diff_hours(dt2, dt1) 
 		 {
 
 		  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
@@ -128,25 +107,11 @@ app.post('/admin', urlencodedParser, function (req, res) {
 		console.log(integr);
 	   console.log(decimal);
 	   console.log(min);
-		var span=days+","+hours +":"+min; */
 		
-		
-		var days = (parseInt)(h_diff/24)
-		//console.log(days);
-		var hours = (parseInt)(h_diff%24)
-		console.log(hours);
-		
-		var  integr = Math.floor(h_diff);
-		var decimal = h_diff - integr; 
-		var min=Math.round(decimal*60);
-		console.log(integr);
-	   console.log(decimal);
-	   console.log(min);
 		var span=days+","+hours +":"+min;
 		
 		var dataObj=new Date();
 		var timestamp=Date.parse(dataObj);
-		
 	 
  mongoose.connection.db.collection('skydock').insert({
 	 "tripid": "#"+timestamp,
@@ -156,11 +121,9 @@ app.post('/admin', urlencodedParser, function (req, res) {
     "rate": req.body.rate,
     "berth": req.body.berth,
     "fromdate":req.body.starttime,
-    "todate": endDate_string,
+    "todate": req.body.endtime,
     "span": span,
-	"timestamp":timestamp,
-	"IMEX":IMEX,
-	"fromdatesearch":new Date(req.body.starttime)
+	"timestamp":timestamp
 });  
 
 if(req.body.berth=="2"){ var order=1;}
@@ -190,13 +153,9 @@ mongoose.connection.db.collection("skydata", function(err, collection){
 															"dataObj":
 																	{
 																		"id":timestamp,
-																		"berth": req.body.berth,
-																		"h_diff":h_diff
+																		"berth": req.body.berth
 																	},
-															"timestamp":timestamp,
-															"fromdate":req.body.starttime,
-															"fromdatesearch":new Date(req.body.starttime),
-															"todate": endDate_string
+															"timestamp":timestamp
 														}
 													}
 												   }
@@ -220,119 +179,60 @@ mongoose.connection.db.collection("skydata", function(err, collection){
 															"dataObj":
 																	{
 																		"id":timestamp,
-																		"berth": req.body.berth,
-																		"h_diff":h_diff
+																		"berth": req.body.berth
 																	},
-															"timestamp":timestamp,
-															"fromdate":req.body.starttime,
-															"fromdatesearch":new Date(req.body.starttime),
-															"todate": endDate_string
+															"timestamp":timestamp
 														}
 													]
 												}); 
 											}
 										})
 									  
-									  }); 
+									  });
 
 
- 
+
 
   
 
 
- res.redirect('/list');
+res.redirect('/');
 
 });
 
-app.get('/skydock_schudle/:search_start_date/:search_end_date', function(req, res){
+app.get('/skydock_schudle', function(req, res){
 
 
-  
-	
-var search_start_date= req.params.search_start_date;
-var search_end_date= req.params.search_end_date;
-//console.log(search_start_date);
-//console.log(search_end_date);
-var search_start_date_1=new Date (parseInt(search_start_date));
-var search_start_date_1_string=""+(search_start_date_1.getMonth()+1)+"/"+search_start_date_1.getDate()+"/"+search_start_date_1.getFullYear()+" "+search_start_date_1.getHours()+":"+search_start_date_1.getMinutes();
-
-var search_end_date_1=new Date (parseInt(search_end_date));
-var search_end_date_1_string=""+(search_end_date_1.getMonth()+1)+"/"+search_end_date_1.getDate()+"/"+search_end_date_1.getFullYear()+" "+search_end_date_1.getHours()+":"+search_end_date_1.getMinutes();
-console.log(search_start_date_1_string);
-console.log(search_end_date_1_string);
-
-	  
-  /* mongoose.connection.db.collection("skydock", function(err, collection){
+  mongoose.connection.db.collection("skydock", function(err, collection){
         //collection.find({}).toArray(function(err, data){
-		 collection.find({ fromdatesearch: { $gte: search_start_date_1_string, $lte: search_end_date_1_string } }).toArray(function(err, data){
-           // console.log(data); // it will print your collection data
-			res.send(data);
-        })
-    }); */
-   
-   mongoose.connection.db.collection("skydock", function(err, collection){
-        //collection.find({}).toArray(function(err, data){
-		 collection.aggregate([
-        //Pre-filter to have data arrays with at least one matching date
-	{$match:{ 'fromdatesearch': {$gte: new Date(search_start_date_1_string), $lte: new Date(search_end_date_1_string)}}}
-    ]).toArray(function(err, data){
+			collection.find({ fromdate: { $gte: "01/04/2018 05:13", $lte: "01/27/2018 05:13" } }).toArray(function(err, data){
            // console.log(data); // it will print your collection data
 			res.send(data);
         })
     });
+
   
 });
 
-app.get('/skydock_schudle_chart/:search_start_date/:search_end_date', function(req, res){
+app.get('/skydock_schudle_chart', function(req, res){
 
-var search_start_date= req.params.search_start_date;
-var search_end_date= req.params.search_end_date;
-//console.log(search_start_date);
-//console.log(search_end_date);
-var search_start_date_1=new Date (parseInt(search_start_date));
-var search_start_date_1_string=""+(search_start_date_1.getMonth()+1)+"/"+search_start_date_1.getDate()+"/"+search_start_date_1.getFullYear()+" "+search_start_date_1.getHours()+":"+search_start_date_1.getMinutes();
 
-var search_end_date_1=new Date (parseInt(search_end_date));
-var search_end_date_1_string=""+(search_end_date_1.getMonth()+1)+"/"+search_end_date_1.getDate()+"/"+search_end_date_1.getFullYear()+" "+search_end_date_1.getHours()+":"+search_end_date_1.getMinutes();
-//console.log(search_start_date_1_string);
-//console.log(search_end_date_1_string);
-
- /*  mongoose.connection.db.collection("skydata", function(err, collection){
-	   collection.find({ "values.fromdatesearch": { $gte: new Date(search_start_date_1_string), $lte: new Date(search_end_date_1_string) } }).sort({"order":1}).toArray(function(err, data){
-       // collection.find({ "values.fromdate": { $gte: search_start_date_1_string, $lte: search_end_date_1_string } }).sort({"order":1}).toArray(function(err, data){
-		//collection.find({}).sort({"order":1}).toArray(function(err, data){
+  mongoose.connection.db.collection("skydata", function(err, collection){
+        collection.find({ "values.fromdate": { $gte: "01/10/2018 05:13", $lte: "01/27/2018 05:13" } }).sort({"order":1}).toArray(function(err, data){
            // console.log(data); // it will print your collection data
 			res.send(data);
         })
-    }); */
-	
-	mongoose.connection.db.collection("skydata", function(err, collection){
-	   collection.aggregate([
-        //Pre-filter to have data arrays with at least one matching date
-	{$match:{ 'values.fromdatesearch': {$gte: new Date(search_start_date_1_string), $lte: new Date(search_end_date_1_string)}}},
-     {$addFields : {"values":{$filter:{ // We override the existing field!
-		input: "$values",
-		as: "item",
-		cond: {$and: [
-							{$gte: ["$$item.fromdatesearch", new Date(search_start_date_1_string)]},
-							{$lte: ["$$item.fromdatesearch", new Date(search_end_date_1_string)]}
-						]}
-	}}}}
-    ]).sort({"order":1}).toArray(function(err, data){
-			res.send(data);
-        })
     });
- 
+
+  
 });
-app.get('/update/:timestamp/:berth/:label/:customClass/:startDate/:endDate/:h_diff', function(req, res){
+app.get('/update/:timestamp/:berth/:label/:customClass/:startDate/:endDate', function(req, res){
  var id= req.params.timestamp;
   var berth= req.params.berth;
   var prod= req.params.label;
   var priority= req.params.customClass;
     var startDate= req.params.startDate;
       var endDate= req.params.endDate;
-	  var h_diff=req.params.h_diff;
  
 		var dataObj=new Date();
 		var timestamp=Date.parse(dataObj);
@@ -342,23 +242,23 @@ app.get('/update/:timestamp/:berth/:label/:customClass/:startDate/:endDate/:h_di
 			
 			var startDate_string=""+(startDate_1.getMonth()+1)+"/"+startDate_1.getDate()+"/"+startDate_1.getFullYear()+" "+startDate_1.getHours()+":"+startDate_1.getMinutes();
 		    //alert(startDate_string)
-		    /* var startDate_2=new Date (parseInt(req.params.endDate));
-			var endDate_string=""+(startDate_2.getMonth()+1)+"/"+startDate_2.getDate()+"/"+startDate_2.getFullYear()+" "+startDate_2.getHours()+":"+startDate_2.getMinutes(); */
+		    var startDate_2=new Date (parseInt(req.params.endDate));
+			var endDate_string=""+(startDate_2.getMonth()+1)+"/"+startDate_2.getDate()+"/"+startDate_2.getFullYear()+" "+startDate_2.getHours()+":"+startDate_2.getMinutes();
 			//alert(endDate_string)
-		    
-			var date = new Date(startDate_string);
-			  date.setHours(date.getHours() + h_diff);
-			var endDate =date.toString();
-			  console.log(date);
-			var endDate_string=""+(date.getMonth()+1)+"/"+date.getDate()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes();
-			  console.log(endDate_string);
-			  
-			var datum2 = Date.parse(endDate_string);
-				 //var endtime_tm=datum2/1000;
-				 var endtime_tm=datum2;
-				 //console.log(starttime_tm);
-				 console.log(endtime_tm); 
-			
+		    function diff_hours(dt2, dt1) 
+				 {
+
+				  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+				  diff /= (60 * 60);
+				  //return Math.abs(Math.round(diff));
+				  return Math.abs(diff);
+				 }
+			//dt1 = new Date(req.params.startDate); 
+			//dt2 = new Date(req.params.endDate); 
+			dt1 = new Date(startDate_string); 
+			dt2 = new Date(endDate_string); 
+			var h_diff=diff_hours(dt1, dt2);
+			console.log(h_diff);
 			var days = (parseInt)(h_diff/24)
 			//console.log(days);
 			var hours = (parseInt)(h_diff%24)
@@ -370,8 +270,9 @@ app.get('/update/:timestamp/:berth/:label/:customClass/:startDate/:endDate/:h_di
 			console.log(integr);
 		   console.log(decimal);
 		   console.log(min);
+			
 			var span=days+","+hours +":"+min;
-				//var span=12;
+			//var span=12;
 		
 
   
@@ -408,19 +309,15 @@ app.get('/update/:timestamp/:berth/:label/:customClass/:startDate/:endDate/:h_di
 																										//"from": req.body.starttime,
 																										//"to": req.body.endtime,
 																										"from": "/Date("+startDate+")/",
-																										"to": "/Date("+endtime_tm+")/",
+																										"to": "/Date("+endDate+")/",
 																										"label": prod,
 																										"customClass":priority,
 																										"dataObj":
 																												{
 																													"id":timestamp,
-																													"berth": req.params.berth,
-																													"h_diff":h_diff
+																													"berth": req.params.berth
 																												},
-																										 "timestamp":timestamp,
-																										 "fromdate": startDate_string,
-																										 "fromdatesearch":new Date(startDate_string),
-															                                              "todate": endDate_string
+																										 "timestamp":timestamp
 																									}
 																								}
 																							   }
@@ -437,19 +334,15 @@ app.get('/update/:timestamp/:berth/:label/:customClass/:startDate/:endDate/:h_di
 																										//"from": req.body.starttime,
 																										//"to": req.body.endtime, 
 																										"from": "/Date("+startDate+")/",
-																										"to": "/Date("+endtime_tm+")/",
+																										"to": "/Date("+endDate+")/",
 																										"label": prod,
 																										"customClass":priority,
 																										"dataObj":
 																												{
 																													"id":timestamp,
-																													"berth": req.params.berth,
-																													"h_diff":h_diff
+																													"berth": req.params.berth
 																												},
-																										"timestamp":timestamp,
-																										"fromdate": startDate_string,
-																										"fromdatesearch":new Date(startDate_string),
-															                                             "todate": endDate_string
+																										"timestamp":timestamp
 																									}
 																								]
 																							}); 
@@ -464,19 +357,6 @@ app.get('/update/:timestamp/:berth/:label/:customClass/:startDate/:endDate/:h_di
 		    res.send(data);							
    
  
-});
-
-app.get('/remove/:timestamp/', function(req, res){
-	 var timestamp= req.params.timestamp;
-	 console.log(timestamp);
- 	 mongoose.connection.db.collection('skydata').update(
-															   {},
-															   { $pull: { values:{ "timestamp":parseInt(req.params.timestamp)}}},
-															   { multi: true }
-																); 
-	  mongoose.connection.db.collection('skydock').remove( { "timestamp" :parseInt(req.params.timestamp) } )
-	  var data='[{"stats":1}]';
-     res.send(data);	
 });
 
 app.set('port', (process.env.PORT || 5000));

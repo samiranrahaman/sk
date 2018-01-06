@@ -73,8 +73,7 @@
     .fn-gantt .leftPanel .name, .fn-gantt .leftPanel .desc
     {
         float: left;
-        /*height: 23px;*/
-		height: 92px;
+        height: 23px;
         margin: 0;
         border-bottom: 1px solid #DDD;
         background-color: #f6f6f6;
@@ -108,30 +107,14 @@
         overflow: hidden;
     }
 
-  /*   .fn-gantt .dataPanel
+    .fn-gantt .dataPanel
     {
         margin-left: 0px;
         border-right: 1px solid #DDD;
-        background-image: url(../css/gridBG.gif);
+        background-image: url(../img/gridBG.gif);
         background-repeat: repeat;
         background-position: 24px 24px;
-    } */
-	
-	  .fn-gantt .dataPanel
-    {
-    /* border-right: 1px solid #DDD;
-    background-position: -15px 24px;
-    padding-left: 5px;
-    background-image: linear-gradient(to right, #ccc 1px, transparent 1px), linear-gradient(#fff 1px, transparent 1px);
-    background-size: 50.9px 1px;
-    margin-left: 0; */
-	
-    height: 2px;
-    background: linear-gradient(to right,transparent 1px, #e7e2e2 1px);
-    background-size: 96.1px 2px, 100% 2px;
     }
-	
-	
 
     /*.fn-gantt .dataPanel:after {
        content: ".";
@@ -140,12 +123,11 @@
        height: 100000px;
        clear: both;
     }*/
- /* === Custom width change === */
+
     .fn-gantt .day
     {
         overflow: visible;
-        /*width: 24px;*/
-		width: 97px; 
+        width: 24px;
         line-height: 24px;
         text-align: center;
         border-left: 1px solid #DDD;
@@ -156,10 +138,7 @@
         text-shadow: 0 1px 0 rgba(255,255,255,0.75);
         text-align: center;
     }
-  .dataPanel .row {
-     margin-right: 0px; 
-     margin-left: 0px ; 
-}
+
     .fn-gantt .holiday
     {
         background-color: #ffd263;
@@ -533,7 +512,7 @@
     {
         width: 17px;
         height: 60px;
-        background: url(../css/slider_handle.png);
+        background: url(../img/slider_handle.png);
         left: 0px;
         top: 0px;
         margin: -26px 0 0 0;
@@ -568,7 +547,7 @@
         width: 20px;
         height: 20px;
         font-size: 0px;
-        background: #595959 url(../css/icon_sprite.png) !important;
+        background: #595959 url(../img/icon_sprite.png) !important;
         border: 1px solid #454546;
         cursor: pointer;
         vertical-align: top;
@@ -659,7 +638,7 @@
 
     .fn-gantt-loader
     {
-        background-image: url(../css/loader_bg.png);
+        background-image: url(../img/loader_bg.png);
         z-index: 30;
     }
 
